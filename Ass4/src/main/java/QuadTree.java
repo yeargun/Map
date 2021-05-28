@@ -11,11 +11,66 @@ public class QuadTree {
         // Call the build method with depth 1
         // Save the imageRoot value to the instance variable
         /* Code here */
+        this.root = new QTreeNode("root", 0, 0, 0, 0, 0);
+        this.imageRoot = imageRoot;
+        build(root,0);
+
     }
 
     public void build(QTreeNode subTreeRoot, int depth) {
         // Recursive method to build the tree as instructed
         /* Code here */
+        if(depth == 8){
+            return;
+        }
+
+        double newULLON, newULLAT, newLRLON, newLRLAT;
+        QTreeNode n = subTreeRoot;
+        /* 1: Upper left tile: same ULLON & ULLAT, diff LRLON & LRLAT */
+        newULLON = n.getUpperLeftLongtitude();
+        newULLAT = n.getUpperLeftLatitude();
+        newLRLON = ((n.getLowerRightLongtitude() - n.getUpperLeftLongtitude()) / 2) + n.getUpperLeftLongtitude();
+        newLRLAT = ((n.getUpperLeftLatitude() - n.getLowerRightLatitude()) / 2) + n.getLowerRightLatitude();  // order switched bc ULLAT > LRLAT
+        if(n.getName().equals("root")){n.NW = new QTreeNode("1", newULLAT,newULLON, newLRLAT, newLRLON,depth + 1); }
+        else{
+            n.NW = new QTreeNode(n.getName() + "1", newULLAT,newULLON, newLRLAT, newLRLON,depth + 1);
+        }
+        System.out.println(n.getName());
+        build(n.NW, depth + 1);
+
+
+        /* 2: Upper right tile: same ULLAT & LRLON, diff ULLON & LRLAT */
+        newULLON = ((n.getLowerRightLongtitude() - n.getUpperLeftLongtitude()) / 2) + n.getUpperLeftLongtitude();
+        newULLAT = n.getUpperLeftLatitude();
+        newLRLON = n.getLowerRightLongtitude();
+        newLRLAT = ((n.getUpperLeftLatitude() - n.getLowerRightLatitude()) / 2) + n.getLowerRightLatitude();
+        if(n.getName().equals("root")){n.NE = new QTreeNode("2", newULLAT,newULLON, newLRLAT, newLRLON,depth + 1); }
+        else{
+            n.NE = new QTreeNode(n.getName() + "2", newULLAT,newULLON, newLRLAT, newLRLON,depth + 1);
+        }
+        build(n.NE, depth + 1);
+
+        /* 3: Lower left tile: same ULLON & LRLAT, diff ULLAT & LRLON */
+        newULLON = n.getUpperLeftLongtitude();
+        newULLAT = ((n.getUpperLeftLatitude() - n.getLowerRightLatitude()) / 2) + n.getLowerRightLatitude();
+        newLRLON = ((n.getLowerRightLongtitude() - n.getUpperLeftLongtitude()) / 2) + n.getUpperLeftLongtitude();
+        newLRLAT = n.getLowerRightLatitude();
+        if(n.getName().equals("root")){n.SW = new QTreeNode("3", newULLAT,newULLON, newLRLAT, newLRLON,depth + 1); }
+        else{
+            n.SW = new QTreeNode(n.getName() + "3", newULLAT,newULLON, newLRLAT, newLRLON,depth + 1);
+        }
+        build(n.SW, depth + 1);
+
+        /* 4: Lower right tile: same LRLON & LRLAT, diff ULLON & ULLAT */
+        newULLON = ((n.getLowerRightLongtitude() - n.getUpperLeftLongtitude()) / 2) + n.getUpperLeftLongtitude();
+        newULLAT = ((n.getUpperLeftLatitude() - n.getLowerRightLatitude()) / 2) + n.getLowerRightLatitude();
+        newLRLON = n.getLowerRightLongtitude();
+        newLRLAT = n.getLowerRightLatitude();
+        if(n.getName().equals("root")){n.SE = new QTreeNode("4", newULLAT,newULLON, newLRLAT, newLRLON,depth + 1); }
+        else{
+            n.SE = new QTreeNode(n.getName() + "4", newULLAT,newULLON, newLRLAT, newLRLON,depth + 1);
+        }
+        build(n.SE, depth + 1);
     }
 
     public Map<String, Object> search(Map<String, Double> params) {
@@ -32,6 +87,8 @@ public class QuadTree {
         // Call the search() method with the query box and the lonDpp value
         // Call and return the result of the getMap() method to return the acquired nodes in an appropriate way
         /* Code here */
+
+
         return new HashMap<>();
     }
 

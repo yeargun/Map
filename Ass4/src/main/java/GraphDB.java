@@ -28,7 +28,7 @@ public class GraphDB {
 
     static String normalizeString(String s) {
         // Should match all strings that are not alphabetical
-        String regex = ""/* Replace *//* Code here */;
+        String regex = "[^A-Za-z]"/* Replace *//* Code here */;
         return s.replaceAll(regex, "").toLowerCase();
     }
 
